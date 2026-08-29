@@ -1,0 +1,7 @@
+# Arquivos que não devem ir para o site publicado (git archive / deploy)
+.github/            export-ignore
+.htmlhintrc         export-ignore
+.gitattributes      export-ignore
+.gitignore          export-ignore
+README.md           export-ignore
+.claude/            export-ignore
