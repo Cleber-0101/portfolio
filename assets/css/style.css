@@ -14,7 +14,16 @@
     --ease: cubic-bezier(0.25, 0.46, 0.45, 0.94);
   }
 
-  html { scroll-behavior: smooth; }
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    -webkit-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+  }
+
+  img, svg { max-width: 100%; }
+
+  section[id] { scroll-margin-top: 0; }
 
   body {
     background: var(--white);
@@ -281,7 +290,7 @@
 
   .skills-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 0;
     margin-top: 48px;
     border: 1px solid var(--gray-200);
@@ -358,19 +367,13 @@
     gap: 12px;
     transition: background 0.2s;
     position: relative;
-    overflow: hidden;
-    aspect-ratio: 1 / 1;
+    min-height: 260px;
+    min-width: 0;
   }
 
-  .project-card.is-wip {
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    gap: 6px;
-  }
-
-  .project-card.is-wip .project-title { padding-right: 0; color: var(--gray-400); }
-  .project-card.is-wip::after { content: none; }
+  .project-card.no-link { cursor: default; }
+  .project-card.no-link::after { content: none; }
+  .project-card.no-link .project-title { padding-right: 0; }
 
   .project-card:hover { background: var(--gray-100); }
 
@@ -394,6 +397,8 @@
   .contact-sub { font-size: 15px; color: var(--gray-600); line-height: 1.8; font-weight: 300; margin-bottom: 40px; }
   .contact-email { display: inline-flex; align-items: center; gap: 10px; font-size: 15px; color: var(--black); text-decoration: none; border-bottom: 1px solid var(--black); padding-bottom: 2px; font-weight: 400; transition: opacity 0.2s; }
   .contact-email:hover { opacity: 0.5; }
+  .contact-links { display: flex; flex-direction: column; align-items: flex-start; gap: 18px; }
+  .contact-links .contact-email { max-width: 100%; overflow-wrap: anywhere; }
 
   .mobile-header {
     display: none;
@@ -431,8 +436,9 @@
     transition: transform 0.4s var(--ease);
   }
 
-  .mobile-menu.open { transform: translateX(0); }
-  .mobile-menu nav { display: flex; flex-direction: column; }
+  .mobile-menu { overflow-y: auto; visibility: hidden; transition: transform 0.4s var(--ease), visibility 0s linear 0.4s; }
+  .mobile-menu.open { transform: translateX(0); visibility: visible; transition: transform 0.4s var(--ease), visibility 0s; }
+  .mobile-menu nav { display: flex; flex-direction: column; margin-top: 0; }
   .mobile-menu nav a { padding: 14px 0; font-size: 22px; font-family: var(--font-display); color: var(--black); text-decoration: none; border-bottom: 1px solid var(--gray-200); letter-spacing: -0.3px; text-transform: none; display: block; transition: opacity 0.2s; }
   .mobile-menu nav a:hover { opacity: 0.5; }
   .mobile-menu nav a::before { display: none; }
@@ -440,8 +446,25 @@
 
   footer { padding: 40px 0; font-size: 12px; color: var(--gray-400); display: flex; justify-content: space-between; align-items: center; border-top: 1px solid var(--gray-200); margin-top: 0; flex-wrap: wrap; gap: 12px; }
 
+  /* Notebooks e tablets deitados: sidebar visível, menos respiro lateral */
+  @media (min-width: 901px) and (max-width: 1180px) {
+    :root { --nav-w: 240px; }
+    .sidebar { padding: 48px 32px 40px; }
+    main { padding: 0 48px; }
+    .exp-item::before { left: -48px; right: -48px; }
+    .exp-item { grid-template-columns: 120px 1fr; gap: 0 24px; }
+    .project-card { padding: 28px 24px; }
+  }
+
+  /* Telas baixas (notebook pequeno / tablet deitado): sidebar rola se faltar altura */
+  @media (min-width: 901px) and (max-height: 640px) {
+    .sidebar { overflow-y: auto; padding-top: 32px; padding-bottom: 32px; }
+    nav { margin-top: 32px; }
+  }
+
   @media (max-width: 900px) {
     .sidebar { display: none; }
+    section[id] { scroll-margin-top: 60px; }
     .mobile-header { display: flex; }
     .mobile-menu { display: flex; }
     main { margin-left: 0; padding: 80px 32px 0; max-width: 100%; }
@@ -452,18 +475,49 @@
     .exp-item::before { left: -32px; right: -32px; }
     .exp-date span { display: inline; margin-right: 6px; }
     .projects-grid { grid-template-columns: 1fr 1fr; }
-    .project-card { padding: 22px 18px; }
-    .project-title { font-size: 15px; }
-    .project-desc { font-size: 12px; }
+    .project-card { padding: 26px 22px; min-height: 0; }
+    .project-title { font-size: 17px; }
+    .project-desc { font-size: 13px; }
+    .project-card::after { top: 22px; right: 20px; }
   }
 
+  /* Celulares */
   @media (max-width: 600px) {
-    main { padding: 80px 24px 0; }
-    .exp-item::before { left: -24px; right: -24px; }
-    .skills-grid { grid-template-columns: 1fr 1fr; }
+    main { padding: 80px 20px 0; }
+    #hero { padding-top: 56px; padding-bottom: 64px; }
+    section { padding: 72px 0; }
+    .exp-item::before { left: -20px; right: -20px; }
+    .exp-item { padding: 32px 0; }
+    .hero-desc { font-size: 16px; }
+    .hero-cta a { flex: 1 1 auto; justify-content: center; }
+    .skills-grid { grid-template-columns: 1fr 1fr; margin-top: 40px; }
+    .skill-item { padding: 16px; }
     .skill-item:nth-child(3n) { border-right: 1px solid var(--gray-200); }
     .skill-item:nth-child(2n) { border-right: none; }
+    .skill-item:last-child:nth-child(odd) { grid-column: 1 / -1; border-right: none; }
+    .skill-item-value { font-size: 13px; }
+    .projects-grid { grid-template-columns: 1fr; }
+    .project-card { padding: 24px 20px; }
+    .contact-email { font-size: 14px; }
     footer { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* Celulares bem estreitos (ex.: iPhone SE 1ª geração, Galaxy Fold fechado) */
+  @media (max-width: 360px) {
+    main { padding: 76px 16px 0; }
+    .exp-item::before { left: -16px; right: -16px; }
+    .mobile-header { padding: 0 16px; }
+    .mobile-menu { padding: 32px 16px; }
+    h1 { font-size: 38px; letter-spacing: -1.5px; }
+    .greeting { letter-spacing: 1.5px; font-size: 11px; }
+    .skills-grid { grid-template-columns: 1fr; }
+    .skill-item, .skill-item:nth-child(3n) { border-right: none; }
+  }
+
+  /* Celular deitado: menu cabe na altura */
+  @media (max-width: 900px) and (max-height: 500px) {
+    .mobile-menu { padding: 16px 32px; gap: 16px; }
+    .mobile-menu nav a { padding: 8px 0; font-size: 18px; }
   }
 
   .progress { position: fixed; top: 0; left: 0; height: 2px; background: var(--black); z-index: 999; width: 0%; transition: width 0.1s linear; }

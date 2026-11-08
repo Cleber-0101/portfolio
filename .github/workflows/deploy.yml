@@ -22,11 +22,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Montar pasta de publicação (_site) só com arquivos versionados
+      - name: Montar pasta de publicação (_site) só com o site
         run: |
+          set -e
           mkdir -p _site
-          git archive HEAD --format=tar | tar -x -C _site
-          ls -la _site
+          cp index.html _site/
+          cp -r assets _site/
+          find _site -type f | sort
 
       - name: Configurar Pages
         uses: actions/configure-pages@v5

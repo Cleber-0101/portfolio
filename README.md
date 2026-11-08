@@ -1,25 +1,51 @@
 # Site Portfólio — Cleber Batista
 
-Site estático (HTML/CSS/JS puro, sem build) publicado no **GitHub Pages**.
+Portfólio pessoal de **Cleber Batista**, Backend Developer Jr (Node.js · TypeScript · APIs REST · SQL).
 
-## CI/CD
+🔗 **No ar:** https://cleber-0101.github.io/Site-portif-lio/
 
-| Workflow | Arquivo | Quando roda | O que faz |
-|----------|---------|-------------|-----------|
-| **CI** | [.github/workflows/ci.yml](.github/workflows/ci.yml) | `push` na `master` e em Pull Requests | Lint do HTML (`htmlhint`) e checagem dos arquivos essenciais |
-| **Deploy site** | [.github/workflows/deploy.yml](.github/workflows/deploy.yml) | `push` na `master` (ou manual em *Actions → Run workflow*) | Empacota os arquivos versionados e publica no GitHub Pages |
+Site estático (HTML, CSS e JavaScript puros, sem build), responsivo para celular, tablet e desktop,
+hospedado de graça no **GitHub Pages**.
 
-Ou seja: **todo push na `master` faz deploy automático.**
+## Estrutura
 
-### Configuração única (só na primeira vez)
+```
+.
+├── index.html                  # página única do site
+├── assets/
+│   ├── css/style.css           # estilos (inclui os breakpoints de celular/tablet)
+│   ├── js/script.js            # menu mobile, barra de progresso e animações
+│   ├── img/foto-perfil.jpg     # foto do perfil (também usada na prévia do link)
+│   ├── img/favicon.svg         # ícone da aba
+│   └── docs/Cleber-Batista-CV.pdf  # currículo para download
+└── .github/workflows/
+    ├── ci.yml                  # validação
+    └── deploy.yml              # publicação no GitHub Pages
+```
 
-No repositório no GitHub: **Settings → Pages → Build and deployment → Source → "GitHub Actions"**.
+## Deploy automático (CI/CD)
 
-Sem isso o workflow de deploy falha com erro de permissão de Pages.
+| Workflow | Quando roda | O que faz |
+|----------|-------------|-----------|
+| **CI** ([ci.yml](.github/workflows/ci.yml)) | `push` na `master` e em Pull Requests | Lint do HTML (`htmlhint`) e checa se todo arquivo citado no HTML existe |
+| **Deploy site** ([deploy.yml](.github/workflows/deploy.yml)) | `push` na `master` (ou manual em *Actions → Run workflow*) | Publica só `index.html` + `assets/` no GitHub Pages |
+
+**Todo push na `master` atualiza o site sozinho** em 1–2 minutos. O andamento aparece na aba *Actions*.
+
+Configuração (já feita; só precisa repetir se criar outro repositório):
+**Settings → Pages → Build and deployment → Source → "GitHub Actions"**.
+
+## Como atualizar
+
+- **Currículo:** substitua `assets/docs/Cleber-Batista-CV.pdf` mantendo o mesmo nome.
+- **Foto:** substitua `assets/img/foto-perfil.jpg` (quadrada, ~480×480).
+- **Textos, experiências e projetos:** edite `index.html`.
+
+Depois: `git add .`, `git commit -m "..."` e `git push`.
 
 ## Rodar localmente
 
-Basta abrir `index.html` no navegador, ou servir a pasta:
+Abra o `index.html` no navegador ou sirva a pasta:
 
 ```bash
 npx serve .
